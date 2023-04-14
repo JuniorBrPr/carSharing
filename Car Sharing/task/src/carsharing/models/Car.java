@@ -13,6 +13,10 @@ public class Car {
         this.companyId = companyId;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

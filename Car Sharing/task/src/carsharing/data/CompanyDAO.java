@@ -44,9 +44,9 @@ public class CompanyDAO extends DAO<Company> {
         }
     }
 
-    public List<Company> getAll() {
-        ArrayList<Company> companies = new ArrayList<>();
+    public ArrayList<Company> getAll() {
         try {
+            ArrayList<Company> companies = new ArrayList<>();
             Statement statement = this.connection.createStatement();
             String sql = """
                     SELECT * FROM COMPANY;
@@ -58,9 +58,9 @@ public class CompanyDAO extends DAO<Company> {
                 company.setName(resultSet.getString("name"));
                 companies.add(company);
             }
+            return companies;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return companies;
     }
 }

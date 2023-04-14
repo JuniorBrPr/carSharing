@@ -1,6 +1,8 @@
 package carsharing.data;
 
 import carsharing.models.Car;
+import carsharing.models.Company;
+import carsharing.models.Customer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,10 +47,32 @@ public class CarDAO extends DAO<Car> {
         }
     }
 
-    public List<Car> getAllFor(int companyId) {
+    @Override
+    public ArrayList<Car> getAll() {
+        try {
+            ArrayList<Car> cars = new ArrayList<>();
+            Statement statement = this.connection.createStatement();
+            String sql = """
+                    SELECT * FROM Car;
+                    """;
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Car car = new Car();
+                car.setId(resultSet.getInt("id"));
+                car.setName(resultSet.getString("name"));
+                car.setCompanyId(resultSet.getInt("company_id"));
+                cars.add(car);
+            }
+            return cars;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Car> getAllFor(Company company) {
         try {
             Statement statement = this.connection.createStatement();
-            String sql = "SELECT * FROM Car WHERE company_id = %d".formatted(companyId);
+            String sql = "SELECT * FROM Car WHERE company_id = %d".formatted(company.getId());
             ResultSet resultSet = statement.executeQuery(sql);
             ArrayList<Car> cars = new ArrayList<>();
             while (resultSet.next()) {
@@ -59,6 +83,24 @@ public class CarDAO extends DAO<Car> {
                 cars.add(car);
             }
             return cars;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Car getRentedCar(Customer customer){
+        try {
+            Statement statement = this.connection.createStatement();
+            String sql = "SELECT * FROM Car WHERE id = %d".formatted(customer.getRentedCarId());
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                Car car = new Car();
+                car.setId(resultSet.getInt("id"));
+                car.setName(resultSet.getString("name"));
+                car.setCompanyId(resultSet.getInt("company_id"));
+                return car;
+            }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
