@@ -16,7 +16,7 @@ public class CompanyDAO extends DAO<Company> {
 
     @Override
     public void createTable() {
-        try{
+        try {
             Statement statement = this.connection.createStatement();
             String sql = """
                     CREATE TABLE IF NOT EXISTS Company (
@@ -28,7 +28,6 @@ public class CompanyDAO extends DAO<Company> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
 
@@ -40,12 +39,11 @@ public class CompanyDAO extends DAO<Company> {
             statement.executeUpdate(sql);
             System.out.println("The company was created!");
         } catch (SQLException e) {
-            System.out.println("Error while creating company! :"+ e.getMessage());
+            System.out.println("Error while creating company! :" + e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    @Override
     public List<Company> getAll() {
         ArrayList<Company> companies = new ArrayList<>();
         try {
